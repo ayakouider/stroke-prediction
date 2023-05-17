@@ -14,24 +14,27 @@ df2=pd.read_csv(r"C:\Users\tuma2\Downloads\train.csv",index_col="id")
 data=pd.concat([df1,df2],axis=0)
 ```
 concat function is used to merge the 2 dataframes vertically.
-## data cleaning:
+## preparing the data:
 to deal with null values in bmi we used interpolate() function which replaces the null values with the mean
 ```
 data["bmi"].interpolate(method="linear",inplace=True)
 ```
+we droped work_type and residence_type
+```
+data=data.drop(columns=["Residence_type","work_type"])
+```
+we one-hot-encoded nominal data using pandas get_dummies()
+```
+data=pd.get_dummies(data,columns=["gender","smoking_status"])
+```
+for ordinal data we used a dictionary to encode the data and replace it in the dataframe
+```
+int_marr={"ever_married":{"Yes":1,"No":0}}
+data.replace(int_marr,inplace=True)
+```
 using seaborns countplot() for categorical variables
 
 and kdeplot() for numerical variables
-
-3.data cleaning:
-to deal with null values in bmi we used interpolate() function which replaces the null values with the mean
-
-
-we droped work_type and residence_type
-
-we one-hot-encoded gender and smoking status 
-
-labeled ever_married using a dictionary to achieve the same results as ordinal encoding
 
 4.Scaling:
 
