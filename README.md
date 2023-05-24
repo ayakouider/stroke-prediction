@@ -6,6 +6,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import csv
+import scipy.stats as st
 ```
 ## loading data:
 ```
@@ -84,7 +85,7 @@ Xtest = sc.transform(Xtest)
 the model we used is gradient boosting:
 ```
 from sklearn.ensemble import GradientBoostingClassifier
-gb=GradientBoostingClassifier()
+gb=GradientBoostingClassifier(learning_rate=0.05,max_depth=2,min_samples_split=0.3,n_estimators=100,max_features=12)
 gb.fit(Xtrain,ytrain)
 ```
 the performance metric we used is the auroc curve:
@@ -111,6 +112,11 @@ xts=sc.transform(xt)
 prediction:
 ```
 result=gb.predict(xts)
+```
+confidence interval:
+```
+st.t.interval(0.90, len(result)-1, loc=np.mean(result), scale=st.sem(result))
+st.t.interval(0.95, len(result)-1, loc=np.mean(result), scale=st.sem(result))
 ```
 then we put the results in a csv file with the id:
 ```
